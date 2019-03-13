@@ -67,9 +67,10 @@ def connect_user(request, access_token=None, facebook_graph=None, connect_facebo
         user = _connect_user(request, converter, overwrite=True)
     else:
         email = facebook_data.get('email', False)
-        email_verified = facebook_data.get('verified', False)
+        # email_verified = facebook_data.get('verified', False)
         kwargs = {}
-        if email and email_verified:
+        # if email and email_verified:
+        if email:
             kwargs = {'facebook_email': email}
         auth_user = authenticate(facebook_id=facebook_data['id'], **kwargs)
         if auth_user and not force_registration:
@@ -228,9 +229,9 @@ def _register_user(request, facebook, profile_callback=None,
             request.GET.get('force_registration_hard'):
         data['email'] = data['email'].replace(
             '@', '+test%s@' % randint(0, 1000000000))
-        
+
     if not data['email']:
-        data['email'] = '%s@facebook.com' % data['username'] 
+        data['email'] = '%s@facebook.com' % data['username']
 
     form = form_class(data=data, files=request.FILES,
                       initial={'ip': request.META['REMOTE_ADDR']})
